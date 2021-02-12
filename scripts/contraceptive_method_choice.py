@@ -39,7 +39,7 @@ plt.rcParams.update({ "font.family": "serif",})
 headers = ['wife_age', 'wife_education', 'husband_education', 'number_children_ever_born',
            'wife_religion', 'wife_working', 'husband_occupation', 'standard_living',
            'media_exposure', 'contraceptive_method_used']
-filename = "/content/cmc.data"
+filename = "../data/cmc.data"
 df = pd.read_csv(filename, names=headers)
 
 """### Data Preprocessing"""
