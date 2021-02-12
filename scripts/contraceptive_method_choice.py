@@ -39,10 +39,12 @@ plt.rcParams.update({ "font.family": "serif",})
 headers = ['wife_age', 'wife_education', 'husband_education', 'number_children_ever_born',
            'wife_religion', 'wife_working', 'husband_occupation', 'standard_living',
            'media_exposure', 'contraceptive_method_used']
-filename = "../data/cmc.data"
+filename = "/content/cmc.data"
 df = pd.read_csv(filename, names=headers)
 
 """### Data Preprocessing"""
+
+headers[:7]
 
 print(f'Dataset info : \n {df.info()} \n Dataset Variables data types : \n {df.dtypes}')
 
@@ -861,6 +863,7 @@ plt.show()
 df_balanced = data.values
 X_balanced = df_balanced[:,:7]
 y_balanced = df_balanced[:,9]
+import pickle
 
 X_train, X_test, y_train, y_test = train_test_split(X_balanced, y_balanced, test_size=0.3, random_state=seed)
 
@@ -868,8 +871,8 @@ model = RandomForestClassifier()
 """ Cross_validation """
 
 cv_results = cross_val_score(model, X_train, y_train, cv=KFold(n_splits=16), scoring='accuracy')
-fitted  = model.fit(X_train, y_train)
-y_hat = fitted.predict(X_test)
+model_rfcl = model.fit(X_train, y_train)
+y_hat = model_rfcl.predict(X_test)
 
 print(f"RFCL Training Accuracy ({cv_results.mean()}) STD ({cv_results.std()})")
 print(f"RFCL Prediction Accuracy {accuracy_score(y_test, y_hat)} \n {confusion_matrix(y_test, y_hat)} \n {classification_report(y_test, y_hat)} ")
@@ -900,4 +903,14 @@ plt.boxplot(results)
 ax.set_xticklabels(names)
 plt.show()
 
-"""###### <b>Finally : compare to other ensemble algorithms and SVM (SVC), RandomForestClassifier remains the best test error rate value between 8% and 9%, the best training and prediction accuracy and the confusion matrix with the first seven predictors of the balanced. These are the only variables that impact the woman's contraceptive method that she uses or will use</b>"""
+"""###### <b>Finally : compare to other ensemble algorithms and SVM (SVC), RandomForestClassifier remains the best test error rate value between 8% and 9%, the best training and prediction accuracy and the confusion matrix with the first seven predictors of the balanced. These are the only variables that impact the woman's contraceptive method that she uses or will use</b>
+
+#### <b>Save the model for reuse purposes</b>
+"""
+
+model_filename = 'finalized_model_rfcl.sav'
+import joblib
+joblib.dump(model_rfcl, model_filename)
+
+
+
